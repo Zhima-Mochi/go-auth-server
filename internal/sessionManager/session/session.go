@@ -4,28 +4,28 @@ import (
 	"time"
 )
 
-type session struct {
+type Session struct {
 	ID      string
 	Expires time.Time
 	Data    map[string]interface{}
 }
 
-func NewSession(sessionID string, expires time.Time, data map[string]interface{}) *session {
-	return &session{
+func NewSession(sessionID string, expires time.Time, data map[string]interface{}) *Session {
+	return &Session{
 		ID:      sessionID,
 		Expires: expires,
 		Data:    data,
 	}
 }
 
-func (s *session) GetID() string {
+func (s *Session) GetID() string {
 	return s.ID
 }
 
-func (s *session) GetExpires() time.Time {
+func (s *Session) GetExpires() time.Time {
 	return s.Expires
 }
 
-func (s *session) GetData() map[string]interface{} {
+func (s *Session) GetData() map[string]interface{} {
 	return s.Data
 }
