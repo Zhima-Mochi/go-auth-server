@@ -10,8 +10,8 @@ import (
 	"io"
 	"time"
 
-	"github.com/Zhima-Mochi/go-user-service/internal/cache"
-	"github.com/Zhima-Mochi/go-user-service/internal/sessionManager/session"
+	"github.com/Zhima-Mochi/go-user-service/external/cache"
+	"github.com/Zhima-Mochi/go-user-service/service/sessionManager/session"
 	"github.com/google/uuid"
 )
 

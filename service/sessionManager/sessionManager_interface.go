@@ -3,7 +3,7 @@ package sessionmanager
 import (
 	"context"
 
-	"github.com/Zhima-Mochi/go-user-service/internal/sessionManager/session"
+	"github.com/Zhima-Mochi/go-user-service/service/sessionManager/session"
 )
 
 type SessionManager interface {
