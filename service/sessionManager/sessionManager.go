@@ -2,15 +2,10 @@ package sessionmanager
 
 import (
 	"context"
-	"crypto/aes"
-	"crypto/cipher"
-	"crypto/rand"
-	"encoding/base64"
-	"encoding/json"
-	"io"
+	"errors"
 	"time"
 
-	"github.com/Zhima-Mochi/go-user-service/external/cache"
+	"github.com/Zhima-Mochi/go-user-service/external"
 	"github.com/Zhima-Mochi/go-user-service/service/sessionManager/session"
 	"github.com/google/uuid"
 )
@@ -19,20 +14,15 @@ var (
 	timeNow = time.Now
 
 	defaultSessionManager = &sessionManager{
-		Name:     "session_id",
-		MaxAge:   3600,
-		Secure:   false,
-		HttpOnly: true,
+		Name:   "session_id",
+		MaxAge: 3600,
 	}
 )
 
 type sessionManager struct {
-	Name      string
-	MaxAge    int
-	Secure    bool
-	HttpOnly  bool
-	SecretKey []byte
-	cache     cache.Cache
+	Name   string
+	MaxAge int
+	cache  external.Cache
 }
 
 // generateSessionID generates a new session id.
@@ -40,46 +30,8 @@ func generateSessionID() string {
 	return uuid.New().String()
 }
 
-// encrypt encrypts data with key.
-func encrypt(data, key []byte) ([]byte, error) {
-	block, err := aes.NewCipher(key)
-	if err != nil {
-		return nil, err
-	}
-
-	ciphertext := make([]byte, aes.BlockSize+len(data))
-	iv := ciphertext[:aes.BlockSize]
-	if _, err := io.ReadFull(rand.Reader, iv); err != nil {
-		return nil, err
-	}
-
-	stream := cipher.NewCTR(block, iv)
-	stream.XORKeyStream(ciphertext[aes.BlockSize:], data)
-
-	return ciphertext, nil
-}
-
-// encodeSessionData encodes session data with secret key.
-func encodeSessionData(session *session.Session, secretKey []byte) (string, error) {
-	// serialize session data to JSON
-	data, err := json.Marshal(session)
-	if err != nil {
-		return "", err
-	}
-
-	// encrypt session data with secret key
-	encryptedData, err := encrypt(data, secretKey)
-	if err != nil {
-		return "", err
-	}
-
-	// encode encrypted data as base64 string
-	encodedData := base64.StdEncoding.EncodeToString(encryptedData)
-
-	return encodedData, nil
-}
-
-func NewSessionManager(cache cache.Cache, options ...SessionManagerOption) *sessionManager {
+// NewSessionManager creates a new session manager.
+func NewSessionManager(cache external.Cache, options ...SessionManagerOption) *sessionManager {
 	sm := defaultSessionManager
 
 	sm.cache = cache
@@ -123,6 +75,10 @@ func (sm *sessionManager) GetSession(ctx context.Context, id string) (*session.S
 
 // UpdateSession updates session by id.
 func (sm *sessionManager) UpdateSession(ctx context.Context, id string, s *session.Session) error {
+	if id != s.ID {
+		return errors.New("session id not match")
+	}
+
 	err := sm.cache.Set(ctx, id, s, time.Duration(sm.MaxAge)*time.Second)
 	if err != nil {
 		return err

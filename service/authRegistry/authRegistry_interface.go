@@ -9,6 +9,6 @@ type AuthRegistry interface {
 	GetAuth(providerType ProviderType) (Auth, error)
 }
 
-type Auth oauth2providers.Auth
+type Auth = oauth2providers.Auth
 
-type ProviderType oauth2providers.ProviderType
+type ProviderType = oauth2providers.ProviderType
