@@ -3,7 +3,7 @@ module github.com/Zhima-Mochi/go-authentication-service
 go 1.19
 
 require (
-	github.com/Zhima-Mochi/go-oauth2-providers v1.0.0-beta-2
+	github.com/Zhima-Mochi/go-oauth2-providers v1.0.0
 	github.com/google/uuid v1.3.0
 )
 

@@ -5,12 +5,12 @@ The `go-authentication-service` package is a comprehensive authentication soluti
 ## Table of Contents
 - [Directory Structure](#directory-structure)
 - [Installation](#installation)
-- [Usage](#usage)
 - [Components](#components)
   - [Auth Registry](#auth-registry)
   - [Cookie Manager](#cookie-manager)
   - [Session Manager](#session-manager)
   - [Utility](#utility)
+- [Example](#example)
 - [License](#license)
 
 ## Directory Structure
