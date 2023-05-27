@@ -1,9 +1,9 @@
-package encryptor
+package utility
 
-type EncryptorOption func(*encryptor)
+type EncryptorOption func(*Encryptor)
 
 func WithSecretKey(secretKey []byte) EncryptorOption {
-	return func(e *encryptor) {
+	return func(e *Encryptor) {
 		e.secretKey = secretKey
 	}
 }

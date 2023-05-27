@@ -5,6 +5,8 @@ import (
 	"time"
 )
 
+var _ CookieManager = (*cookieManager)(nil)
+
 type cookieManager struct {
 	cookieName   string
 	cookieMaxAge int

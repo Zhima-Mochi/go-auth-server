@@ -4,6 +4,8 @@ import (
 	"fmt"
 )
 
+var _ AuthRegistry = (*authRegistry)(nil)
+
 type authRegistry struct {
 	auth map[ProviderType]Auth
 }

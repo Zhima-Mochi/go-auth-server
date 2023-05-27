@@ -1,19 +1,23 @@
-package encryptor
+package utility
 
 import (
 	"crypto/aes"
 	"crypto/cipher"
 	"crypto/rand"
 	"io"
+
+	"github.com/Zhima-Mochi/go-authentication-service/external"
 )
 
-type encryptor struct {
+var _ external.Encryptor = (*Encryptor)(nil)
+
+type Encryptor struct {
 	secretKey []byte
 }
 
-// NewEncryptor creates a new encryptor.
-func NewEncryptor(options ...EncryptorOption) *encryptor {
-	e := &encryptor{
+// NewEncryptor creates a new Encryptor.
+func NewEncryptor(options ...EncryptorOption) *Encryptor {
+	e := &Encryptor{
 		secretKey: generateSecretKey(),
 	}
 
@@ -34,7 +38,7 @@ func generateSecretKey() []byte {
 }
 
 // Encrypt encrypts data with secret key.
-func (e *encryptor) Encrypt(data []byte) ([]byte, error) {
+func (e *Encryptor) Encrypt(data []byte) ([]byte, error) {
 	block, err := aes.NewCipher(e.secretKey)
 	if err != nil {
 		return nil, err
@@ -53,7 +57,7 @@ func (e *encryptor) Encrypt(data []byte) ([]byte, error) {
 }
 
 // Decrypt decrypts data with secret key.
-func (e *encryptor) Decrypt(data []byte) ([]byte, error) {
+func (e *Encryptor) Decrypt(data []byte) ([]byte, error) {
 	block, err := aes.NewCipher(e.secretKey)
 	if err != nil {
 		return nil, err

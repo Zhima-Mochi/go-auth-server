@@ -1,4 +1,4 @@
-package encryptor
+package external
 
 type Encryptor interface {
 	Encrypt(data []byte) ([]byte, error)
